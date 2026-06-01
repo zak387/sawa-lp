@@ -1,0 +1,357 @@
+@import "tailwindcss";
+
+/* ============================================================
+   SAWA — DESIGN SYSTEM TOKENS
+   All design decisions live here. One source of truth.
+   ============================================================ */
+
+@theme {
+  /* ── Color Palette ──────────────────────────────────────── */
+
+  /* Foundation */
+  --color-ink:      #0B1E3D; /* Primary text — deep navy */
+  --color-chalk:    #F0F5FF; /* Page background — icy blue-white */
+  --color-stone:    #6485A8; /* Secondary text — steel blue */
+  --color-deep:     #0F2250; /* Elevated surfaces */
+  --color-ink-mid:  #142860; /* Interactive backgrounds */
+  --color-border:   rgba(11,30,61,0.1); /* Borders and dividers */
+  --color-hover:    rgba(11,30,61,0.06); /* Hover state */
+  --color-icon:     #8AAAC8; /* Non-active icon color */
+
+  /* Signal — the accent. Sky cyan. Techy precision. */
+  --color-signal:     #38BDF8; /* Sky blue — tech accent */
+  --color-signal-dim: #0EA5E9; /* Hover state */
+
+  /* Royal — primary CTA blue */
+  --color-royal:    #1B48C4;
+  --color-royal-dim:#1539A3;
+
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-display: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-sans: var(--font-geist), 'Geist', system-ui, sans-serif;
+
+  /* ── Type Scale ─────────────────────────────────────────── */
+  --text-display-1:  5rem;
+  --text-display-2:  4rem;
+  --text-heading-1:  3rem;
+  --text-heading-2:  2.25rem;
+  --text-heading-3:  1.75rem;
+  --text-body-lg:    1.125rem;
+  --text-body:       1rem;
+  --text-body-sm:    0.875rem;
+  --text-caption:    0.75rem;
+  --text-micro:      0.6875rem;
+
+  /* ── Letter Spacing ─────────────────────────────────────── */
+  --tracking-display: -0.04em;
+  --tracking-heading: -0.025em;
+  --tracking-sub:     -0.015em;
+  --tracking-body:     0em;
+  --tracking-caption:  0.08em;
+
+  /* ── Line Heights ───────────────────────────────────────── */
+  --leading-display: 1.05;
+  --leading-heading: 1.15;
+  --leading-body:    1.65;
+  --leading-caption: 1.5;
+
+  /* ── Spacing (Base 4px) ─────────────────────────────────── */
+  --spacing-1:   0.25rem;
+  --spacing-2:   0.5rem;
+  --spacing-3:   0.75rem;
+  --spacing-4:   1rem;
+  --spacing-6:   1.5rem;
+  --spacing-8:   2rem;
+  --spacing-12:  3rem;
+  --spacing-16:  4rem;
+  --spacing-20:  5rem;
+  --spacing-24:  6rem;
+  --spacing-32:  8rem;
+  --spacing-40:  10rem;
+
+  /* ── Border Radius ──────────────────────────────────────── */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-pill: 9999px;
+
+  /* ── Transitions ────────────────────────────────────────── */
+  --ease-expo-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-enter:      cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-exit:       cubic-bezier(0.4, 0, 1, 1);
+
+  --duration-micro:      100ms;
+  --duration-fast:       200ms;
+  --duration-standard:   300ms;
+  --duration-deliberate: 500ms;
+  --duration-slow:       700ms;
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: #F0F5FF;
+  color: #0B1E3D;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* Film grain overlay */
+html::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: overlay;
+}
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid #38BDF8;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-display-1 {
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+
+.text-display-2 {
+  font-size: clamp(2rem, 4.5vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.text-display-3 {
+  font-size: clamp(1.75rem, 3vw, 3rem);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+
+.text-heading-1 {
+  font-size: clamp(1.75rem, 3.5vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+
+.text-heading-2 {
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.text-heading-3 {
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  font-weight: 500;
+}
+
+.text-body-lg {
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.7;
+  letter-spacing: 0em;
+}
+
+.text-caption-label {
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ============================================================
+   COMPONENT PRIMITIVES
+   ============================================================ */
+
+/* Primary button — royal blue */
+.btn-signal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #1B48C4;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+  white-space: nowrap;
+}
+
+.btn-signal:hover {
+  background-color: #1539A3;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(27,72,196,0.3);
+}
+
+.btn-signal:active {
+  transform: translateY(0);
+}
+
+/* Ghost button */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: transparent;
+  color: #0B1E3D;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(11, 30, 61, 0.2);
+}
+
+.btn-ghost:hover {
+  border-color: #1B48C4;
+  background-color: rgba(27, 72, 196, 0.06);
+  color: #1B48C4;
+}
+
+/* Surface card */
+.card-surface {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(11, 30, 61, 0.08);
+  border-radius: 12px;
+  transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-surface:hover {
+  border-color: rgba(27, 72, 196, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(11, 30, 61, 0.08);
+}
+
+/* Section label */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6485A8;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 1px;
+  background-color: #6485A8;
+  flex-shrink: 0;
+}
+
+/* Section label — inverted (for dark navy sections) */
+.section-label-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(240,246,255,0.5);
+}
+
+.section-label-light::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 1px;
+  background-color: rgba(240,246,255,0.4);
+  flex-shrink: 0;
+}
+
+/* Horizontal rule */
+.rule {
+  height: 1px;
+  background-color: rgba(11, 30, 61, 0.1);
+  border: none;
+}
+
+/* Selection — sky blue */
+::selection {
+  background-color: #38BDF8;
+  color: #0B1E3D;
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html::before {
+    display: none;
+  }
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #E8F0FF;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8AAAC8;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6485A8;
+}
