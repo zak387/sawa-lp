@@ -452,7 +452,7 @@ export default function TabShowcase() {
     <div>
       {/* Tab pills */}
       <div style={{
-        display: "flex", gap: 6, marginBottom: 20,
+        display: "flex", gap: 4, marginBottom: 20, flexWrap: "wrap",
         background: "rgba(11,30,61,0.04)", borderRadius: 100,
         padding: 4, width: "fit-content",
       }}>

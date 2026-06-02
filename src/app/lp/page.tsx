@@ -40,6 +40,30 @@ export default function OnePager() {
 
   return (
     <div style={{ background: "#F0F5FF", minHeight: "100vh", position: "relative" }}>
+      <style>{`
+        .lp-hero-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 72px;
+          align-items: center;
+          width: 100%;
+        }
+        .lp-showcase { display: block; }
+        @media (max-width: 768px) {
+          .lp-hero-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+          .lp-showcase { display: none; }
+          .lp-section {
+            padding: 90px 20px 48px !important;
+          }
+          .lp-nav {
+            padding: 0 20px !important;
+          }
+          .lp-nav-btn span { display: none; }
+        }
+      `}</style>
       <AmbientBackground />
 
       {/* NAV */}
@@ -47,6 +71,7 @@ export default function OnePager() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: EXPO }}
+        className="lp-nav"
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
           display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -72,12 +97,12 @@ export default function OnePager() {
       </motion.nav>
 
       {/* HERO */}
-      <section style={{
+      <section className="lp-section" style={{
         minHeight: "100vh", display: "flex", alignItems: "center",
         padding: "100px 40px 60px", maxWidth: 1200, margin: "0 auto",
         position: "relative", zIndex: 1,
       }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 72, alignItems: "center", width: "100%" }}>
+        <div className="lp-hero-grid">
 
           {/* Copy */}
           <div>
@@ -250,8 +275,9 @@ export default function OnePager() {
             </motion.div>
           </div>
 
-          {/* Tab Showcase */}
+          {/* Tab Showcase — hidden on mobile */}
           <motion.div
+            className="lp-showcase"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.9, ease: EXPO }}
