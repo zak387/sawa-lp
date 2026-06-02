@@ -6,10 +6,14 @@ import StickyServices from "@/components/sections/StickyServices";
 import CTA from "@/components/sections/CTA";
 import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/layout/Footer";
+import AmbientBackground from "@/components/ui/AmbientBackground";
+import CustomCursor from "@/components/ui/CustomCursor";
 
 export default function Home() {
   return (
     <>
+      <AmbientBackground />
+      <CustomCursor />
       <Navigation />
       <main id="main-content">
         <Hero />

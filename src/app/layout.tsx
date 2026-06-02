@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Inter } from "next/font/google";
 import "./globals.css";
-import CustomCursor from "@/components/ui/CustomCursor";
-import AmbientBackground from "@/components/ui/AmbientBackground";
 
 // ── UI Font: Geist ──────────────────────────────────────────
 // Technical precision. Designed for screens. From Vercel.
@@ -101,8 +99,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen overflow-x-hidden">
-        <AmbientBackground />
-        <CustomCursor />
         {children}
       </body>
     </html>
