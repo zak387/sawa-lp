@@ -245,50 +245,6 @@ export default function WorkflowAnimation() {
         })}
       </motion.svg>
 
-      {/* ── Cycling activity notification ── */}
-      <div style={{ marginTop: -8, display: "flex", justifyContent: "center" }}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={notifIdx}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.28, ease: EXPO }}
-            style={{
-              background: "white",
-              border: "1px solid rgba(11,30,61,0.08)",
-              borderRadius: 10,
-              padding: "9px 14px",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 10,
-              boxShadow: "0 4px 20px rgba(11,30,61,0.07)",
-              pointerEvents: "none",
-              userSelect: "none",
-            }}
-          >
-            <span style={{
-              width: 7, height: 7, borderRadius: "50%", flexShrink: 0,
-              background: notif.dot, display: "block",
-              boxShadow: `0 0 6px ${notif.dot}99`,
-            }} />
-            <div>
-              <div style={{
-                fontSize: 11, fontWeight: 600, color: "#0B1E3D",
-                letterSpacing: "-0.01em", lineHeight: 1.25,
-              }}>
-                {notif.text}
-              </div>
-              <div style={{
-                fontSize: 9.5, color: "rgba(11,30,61,0.42)",
-                marginTop: 2, lineHeight: 1.25,
-              }}>
-                {notif.sub}
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
 
     </div>
   );
