@@ -52,198 +52,120 @@ function SetupPanel() {
 /* ══════════════════════════════════════════════════════════════════
    TAB 2 — COPYWRITING
 ══════════════════════════════════════════════════════════════════ */
-const SUBJECT = "We saved your cart, Sarah.";
-const BADGES = ["Personalized", "Brand Voice", "Optimized"];
+const EMAIL_FULL = `Hey Sarah,
+
+You left something behind two days ago. We get it — timing isn't always right.
+
+But here's the thing: the Linen Blazer in your size is almost gone. Only 2 left.
+
+We're holding it for you until midnight tonight.
+
+Use code COMEBACK15 for 15% off at checkout.
+
+— The Team at Maison`;
 
 function CopywritingPanel({ active }: { active: boolean }) {
-  const [step, setStep] = useState(0);
-  // step 0: nothing, 1: subject, 2: header, 3: hero img, 4: greeting+body, 5: product card, 6: cta, 7: footer, 8: badges
+  const [subject, setSubject] = useState("");
+  const [body, setBody]       = useState("");
+  const [done, setDone]       = useState(false);
+
+  const SUBJECT = "We saved something for you, Sarah.";
 
   useEffect(() => {
-    if (!active) { setStep(0); return; }
-    const delays = [300, 700, 1100, 1600, 2200, 2900, 3500, 4200];
-    const timers = delays.map((d, i) => setTimeout(() => setStep(i + 1), d));
-    return () => timers.forEach(clearTimeout);
+    if (!active) { setSubject(""); setBody(""); setDone(false); return; }
+
+    // Type subject first
+    let si = 0;
+    const subjectTimer = setInterval(() => {
+      si++;
+      setSubject(SUBJECT.slice(0, si));
+      if (si >= SUBJECT.length) {
+        clearInterval(subjectTimer);
+        // Then type body
+        let bi = 0;
+        const bodyTimer = setInterval(() => {
+          bi++;
+          setBody(EMAIL_FULL.slice(0, bi));
+          if (bi >= EMAIL_FULL.length) {
+            clearInterval(bodyTimer);
+            setTimeout(() => setDone(true), 500);
+          }
+        }, 18);
+      }
+    }, 45);
+
+    return () => clearInterval(subjectTimer);
   }, [active]);
 
-  const show = (n: number) => step >= n;
+  const isTypingSubject = subject.length < SUBJECT.length && subject.length > 0;
+  const isTypingBody    = subject.length >= SUBJECT.length && body.length < EMAIL_FULL.length;
 
   return (
-    <Shell title="sawa · abandon-cart.html">
-
-      {/* Subject line meta row */}
-      <div style={{
-        display: "flex", gap: 8, alignItems: "center",
-        background: "#F7F9FF", border: `1px solid ${BORDER}`,
-        borderRadius: 10, padding: "9px 14px", marginBottom: 12,
-      }}>
-        <span style={{ fontSize: 9.5, fontWeight: 600, color: MUTED, textTransform: "uppercase", letterSpacing: "0.07em", fontFamily: "system-ui, sans-serif", flexShrink: 0 }}>Subject</span>
-        <span style={{ fontSize: 12.5, fontWeight: 600, color: INK, fontFamily: "system-ui, sans-serif" }}>
-          {show(1) ? SUBJECT : (
-            <motion.span animate={{ opacity: [1,0,1] }} transition={{ repeat: Infinity, duration: 0.8 }}
-              style={{ display: "inline-block", width: 1.5, height: 13, background: P, verticalAlign: "middle" }} />
-          )}
-        </span>
-      </div>
-
-      {/* Email preview */}
-      <div style={{
-        border: `1px solid ${BORDER}`, borderRadius: 12, overflow: "hidden",
-        background: "#ffffff", fontSize: 0,
-      }}>
-
-        {/* Brand header */}
-        <AnimatePresence>
-          {show(2) && (
-            <motion.div
-              initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: EXPO }}
-              style={{
-                background: "#0B1E3D", padding: "14px 20px",
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-              }}
-            >
-              <span style={{ fontSize: 14, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em", fontFamily: "system-ui, sans-serif" }}>MAISON</span>
-              <div style={{ display: "flex", gap: 14 }}>
-                {["New In", "Sale", "About"].map(l => (
-                  <span key={l} style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", fontFamily: "system-ui, sans-serif", cursor: "pointer" }}>{l}</span>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Hero image */}
-        <AnimatePresence>
-          {show(3) && (
-            <motion.div
-              initial={{ opacity: 0, scaleY: 0.7 }} animate={{ opacity: 1, scaleY: 1 }}
-              transition={{ duration: 0.5, ease: EXPO }}
-              style={{
-                height: 90, transformOrigin: "top",
-                background: "linear-gradient(135deg, #E8F0FF 0%, #C8DEFF 50%, #D4EAFF 100%)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                position: "relative", overflow: "hidden",
-              }}
-            >
-              {/* Clothing illustration placeholder */}
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" opacity="0.4">
-                <path d="M14 8 L8 16 L16 18 L16 40 L32 40 L32 18 L40 16 L34 8 L28 12 C26 14 22 14 20 12 Z" fill="#1B48C4" />
-              </svg>
-              <div style={{ position: "absolute", top: 10, right: 12, fontSize: 9, fontWeight: 600, color: "#1B48C4", background: "rgba(27,72,196,0.1)", borderRadius: 100, padding: "3px 8px", fontFamily: "system-ui, sans-serif" }}>
-                Low Stock
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <div style={{ padding: "16px 20px" }}>
-
-          {/* Greeting + body */}
-          <AnimatePresence>
-            {show(4) && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EXPO }}>
-                <p style={{ fontSize: 12, color: INK, lineHeight: 1.7, margin: "0 0 12px", fontFamily: "system-ui, sans-serif" }}>
-                  Hey <span style={{ fontWeight: 700 }}>Sarah</span>,
-                </p>
-                <p style={{ fontSize: 12, color: "#4A5568", lineHeight: 1.7, margin: "0 0 14px", fontFamily: "system-ui, sans-serif" }}>
-                  You left something behind. The <span style={{ color: INK, fontWeight: 600 }}>Linen Blazer</span> in your cart is almost gone — only <span style={{ color: "#E53E3E", fontWeight: 600 }}>2 left in your size</span>.
-                </p>
-              </motion.div>
+    <Shell title="sawa · new-email.tsx">
+      {/* To / From row */}
+      <div style={{ borderBottom: `1px solid ${BORDER}`, paddingBottom: 10, marginBottom: 10 }}>
+        {[
+          { label: "From", value: "sawa@maison.co" },
+          { label: "To",   value: "sarah@customer.com" },
+        ].map(row => (
+          <div key={row.label} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5 }}>
+            <span style={{ fontSize: 10.5, color: MUTED, fontFamily: "system-ui, sans-serif", width: 34, flexShrink: 0 }}>{row.label}</span>
+            <span style={{ fontSize: 11.5, color: INK, fontFamily: "system-ui, sans-serif" }}>{row.value}</span>
+          </div>
+        ))}
+        {/* Subject */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 10.5, color: MUTED, fontFamily: "system-ui, sans-serif", width: 34, flexShrink: 0 }}>Subject</span>
+          <span style={{ fontSize: 11.5, fontWeight: 600, color: INK, fontFamily: "system-ui, sans-serif" }}>
+            {subject}
+            {isTypingSubject && (
+              <motion.span animate={{ opacity: [1,0,1] }} transition={{ repeat: Infinity, duration: 0.5 }}
+                style={{ display: "inline-block", width: 1.5, height: 11, background: P, marginLeft: 1, verticalAlign: "middle" }} />
             )}
-          </AnimatePresence>
-
-          {/* Product card */}
-          <AnimatePresence>
-            {show(5) && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, ease: EXPO }}
-                style={{
-                  display: "flex", gap: 12, alignItems: "center",
-                  background: "#F7F9FF", border: `1px solid ${BORDER}`,
-                  borderRadius: 10, padding: "10px 12px", marginBottom: 14,
-                }}
-              >
-                <div style={{
-                  width: 40, height: 40, borderRadius: 8, flexShrink: 0,
-                  background: "linear-gradient(135deg, #C8DEFF, #E8F0FF)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
-                    <path d="M14 8 L8 16 L16 18 L16 40 L32 40 L32 18 L40 16 L34 8 L28 12 C26 14 22 14 20 12 Z" fill="#1B48C4" opacity="0.5"/>
-                  </svg>
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: INK, fontFamily: "system-ui, sans-serif" }}>Linen Blazer — Sand</div>
-                  <div style={{ fontSize: 10.5, color: MUTED, fontFamily: "system-ui, sans-serif" }}>Size S · Qty 1</div>
-                </div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: INK, fontFamily: "system-ui, sans-serif" }}>$148</div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* CTA button */}
-          <AnimatePresence>
-            {show(6) && (
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4, ease: EXPO }}>
-                <div style={{
-                  background: "#0B1E3D", color: "#fff",
-                  borderRadius: 8, padding: "11px",
-                  textAlign: "center", fontSize: 12, fontWeight: 700,
-                  fontFamily: "system-ui, sans-serif", marginBottom: 10, cursor: "pointer",
-                  letterSpacing: "0.03em",
-                }}>
-                  Complete My Order →
-                </div>
-                <div style={{ textAlign: "center", marginBottom: 14 }}>
-                  <span style={{ fontSize: 10.5, color: P, fontFamily: "system-ui, sans-serif", cursor: "pointer", textDecoration: "underline" }}>
-                    Use code COMEBACK15 for 15% off
-                  </span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Footer links */}
-          <AnimatePresence>
-            {show(7) && (
-              <motion.div
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                transition={{ duration: 0.3, ease: EXPO }}
-                style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 10, display: "flex", justifyContent: "center", gap: 16 }}
-              >
-                {["View Collection", "Track Order", "Unsubscribe"].map(l => (
-                  <span key={l} style={{ fontSize: 9.5, color: MUTED, fontFamily: "system-ui, sans-serif", cursor: "pointer", textDecoration: "underline" }}>{l}</span>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          </span>
         </div>
       </div>
 
-      {/* Badges */}
+      {/* Body */}
+      <div style={{ minHeight: 200, position: "relative" }}>
+        <pre style={{
+          fontSize: 12, lineHeight: 1.75, color: "#334155",
+          fontFamily: "system-ui, sans-serif", whiteSpace: "pre-wrap",
+          margin: 0, wordBreak: "break-word",
+        }}>
+          {body}
+          {isTypingBody && (
+            <motion.span animate={{ opacity: [1,0,1] }} transition={{ repeat: Infinity, duration: 0.5 }}
+              style={{ display: "inline-block", width: 1.5, height: 12, background: P, verticalAlign: "middle" }} />
+          )}
+        </pre>
+      </div>
+
+      {/* Done state */}
       <AnimatePresence>
-        {show(8) && (
+        {done && (
           <motion.div
             initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }} transition={{ duration: 0.4, ease: EXPO }}
-            style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}
+            style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 12, marginTop: 4, display: "flex", alignItems: "center", justifyContent: "space-between" }}
           >
-            {BADGES.map((b, i) => (
-              <motion.div key={b} initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.1, duration: 0.35, ease: EXPO }}
-                style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 600, color: "#22C55E", background: "rgba(34,197,94,0.08)", borderRadius: 100, padding: "4px 10px", fontFamily: "system-ui, sans-serif" }}
-              >
-                <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                {b}
-              </motion.div>
-            ))}
-            <motion.div initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.35, duration: 0.4, ease: EXPO }}
-              style={{ fontSize: 11, fontWeight: 700, color: "#fff", background: P, borderRadius: 100, padding: "4px 12px", fontFamily: "system-ui, sans-serif" }}
+            <div style={{ display: "flex", gap: 6 }}>
+              {["Personalized", "Brand Voice", "Optimized"].map((b, i) => (
+                <motion.span key={b}
+                  initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.1, duration: 0.3, ease: EXPO }}
+                  style={{ fontSize: 10, fontWeight: 600, color: "#22C55E", background: "rgba(34,197,94,0.08)", borderRadius: 100, padding: "3px 9px", fontFamily: "system-ui, sans-serif" }}
+                >
+                  ✓ {b}
+                </motion.span>
+              ))}
+            </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.35, duration: 0.35, ease: EXPO }}
+              style={{ background: P, color: "#fff", borderRadius: 100, padding: "5px 14px", fontSize: 11, fontWeight: 700, fontFamily: "system-ui, sans-serif", cursor: "pointer" }}
             >
-              Ready to Send →
+              Send →
             </motion.div>
           </motion.div>
         )}
@@ -504,6 +426,27 @@ function AnalyticsPanel({ active }: { active: boolean }) {
 ══════════════════════════════════════════════════════════════════ */
 export default function TabShowcase() {
   const [active, setActive] = useState<Tab>("Setup");
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startTimer = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setActive(curr => {
+        const idx = TABS.indexOf(curr);
+        return TABS[(idx + 1) % TABS.length];
+      });
+    }, 20000);
+  };
+
+  useEffect(() => {
+    startTimer();
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, []);
+
+  const handleTabClick = (tab: Tab) => {
+    setActive(tab);
+    startTimer(); // reset 20s timer on manual click
+  };
 
   return (
     <div>
@@ -516,7 +459,7 @@ export default function TabShowcase() {
         {TABS.map(tab => (
           <button
             key={tab}
-            onClick={() => setActive(tab)}
+            onClick={() => handleTabClick(tab)}
             style={{
               padding: "7px 18px", borderRadius: 100,
               border: "none", cursor: "pointer",
