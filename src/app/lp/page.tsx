@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AmbientBackground from "@/components/ui/AmbientBackground";
 import TabShowcase from "@/components/ui/TabShowcase";
+import { supabase } from "@/lib/supabase";
 
 const INK    = "#0B1E3D";
 const P      = "#1E9BF0";
@@ -31,10 +32,26 @@ export default function OnePager() {
   const [email, setEmail]         = useState("");
   const [open, setOpen]           = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading]     = useState(false);
+  const [error, setError]         = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || loading) return;
+    setLoading(true);
+    setError("");
+
+    const { error: insertError } = await supabase
+      .from("leads")
+      .insert({ email, source: "lp" });
+
+    setLoading(false);
+
+    if (insertError) {
+      setError("Something went wrong. Please try again.");
+      return;
+    }
+
     setSubmitted(true);
   };
 
@@ -222,17 +239,20 @@ export default function OnePager() {
                     />
                     <button
                       type="submit"
+                      disabled={loading}
                       style={{
                         flexShrink: 0, padding: "11px 22px",
                         background: INK, color: "#fff",
                         border: "none", borderRadius: 100,
-                        fontSize: 14, fontWeight: 600, cursor: "pointer",
+                        fontSize: 14, fontWeight: 600,
+                        cursor: loading ? "default" : "pointer",
+                        opacity: loading ? 0.6 : 1,
                         letterSpacing: "-0.01em",
                         fontFamily: "var(--font-geist), sans-serif",
                         whiteSpace: "nowrap",
                       }}
                     >
-                      Send
+                      {loading ? "Sending…" : "Send"}
                     </button>
                   </motion.form>
                 )}
@@ -261,13 +281,19 @@ export default function OnePager() {
                       </svg>
                     </div>
                     <span style={{ fontSize: 14, fontWeight: 500, color: INK, fontFamily: "var(--font-geist), sans-serif" }}>
-                      You're on the list. Audit incoming within 48hrs.
+                      You're on the list.
                     </span>
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {!submitted && (
+              {error && (
+                <p style={{ fontSize: 12, color: "#E5484D", marginTop: 12, paddingLeft: 4, fontFamily: "var(--font-geist), sans-serif" }}>
+                  {error}
+                </p>
+              )}
+
+              {!submitted && !error && (
                 <p style={{ fontSize: 12, color: "rgba(11,30,61,0.35)", marginTop: 12, paddingLeft: 4, fontFamily: "var(--font-geist), sans-serif" }}>
                   Free · No obligation · 48hr turnaround
                 </p>
