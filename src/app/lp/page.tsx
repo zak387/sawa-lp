@@ -6,20 +6,20 @@ import AmbientBackground from "@/components/ui/AmbientBackground";
 import TabShowcase from "@/components/ui/TabShowcase";
 import { supabase } from "@/lib/supabase";
 
-const INK    = "#0B1E3D";
-const P      = "#1E9BF0";
-const S      = "#60BFFF";
-const MUTED  = "#6485A8";
-const BORDER = "rgba(11,30,61,0.08)";
+const INK    = "#0A0A0A";
+const P      = "#0A0A0A";
+const S      = "#71717A";
+const MUTED  = "#71717A";
+const BORDER = "rgba(0,0,0,0.09)";
 const EXPO   = [0.16, 1, 0.3, 1] as const;
 
 function Logo() {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
       <svg width="32" height="22" viewBox="0 0 46 32" fill="none" aria-hidden="true">
-        <circle cx="16" cy="16" r="13" fill={P} />
-        <circle cx="30" cy="16" r="13" fill={S} />
-        <path d="M23 4.5 C27.5 7.5 27.5 24.5 23 27.5 C18.5 24.5 18.5 7.5 23 4.5Z" fill="#A8DEFF" opacity="0.9" />
+        <circle cx="16" cy="16" r="13" fill="#0A0A0A" />
+        <circle cx="30" cy="16" r="13" fill="#A1A1AA" />
+        <path d="M23 4.5 C27.5 7.5 27.5 24.5 23 27.5 C18.5 24.5 18.5 7.5 23 4.5Z" fill="#52525B" opacity="0.9" />
       </svg>
       <span style={{ fontFamily: "var(--font-inter), system-ui, sans-serif", fontSize: 18, fontWeight: 600, color: INK, letterSpacing: "-0.04em" }}>
         sawa
@@ -34,6 +34,7 @@ export default function OnePager() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading]     = useState(false);
   const [error, setError]         = useState("");
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,10 +54,97 @@ export default function OnePager() {
     }
 
     setSubmitted(true);
+    setShowPopup(true);
   };
 
   return (
-    <div style={{ background: "#F0F5FF", minHeight: "100vh", position: "relative" }}>
+    <div style={{ background: "#F5F5F5", minHeight: "100vh", position: "relative" }}>
+
+      {/* ── Thank-you popup ── */}
+      <AnimatePresence>
+        {showPopup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setShowPopup(false)}
+            style={{
+              position: "fixed", inset: 0, zIndex: 100,
+              background: "rgba(0,0,0,0.45)",
+              backdropFilter: "blur(6px)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              padding: 20,
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ duration: 0.35, ease: EXPO }}
+              onClick={e => e.stopPropagation()}
+              style={{
+                background: "#fff", borderRadius: 24,
+                padding: "44px 40px", maxWidth: 400, width: "100%",
+                textAlign: "center", position: "relative",
+                boxShadow: "0 32px 80px rgba(0,0,0,0.18)",
+              }}
+            >
+              {/* Close */}
+              <button onClick={() => setShowPopup(false)} style={{
+                position: "absolute", top: 14, right: 14,
+                width: 28, height: 28, borderRadius: "50%",
+                border: "1px solid rgba(0,0,0,0.1)", background: "transparent",
+                cursor: "pointer", fontSize: 16, color: MUTED,
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>×</button>
+
+              {/* Check */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.15, duration: 0.5, ease: EXPO }}
+                style={{
+                  width: 56, height: 56, borderRadius: "50%",
+                  background: "rgba(34,197,94,0.1)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 20px",
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 12l5 5L20 7" stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </motion.div>
+
+              <h2 style={{
+                fontSize: 22, fontWeight: 700, color: INK,
+                letterSpacing: "-0.03em", marginBottom: 12,
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
+              }}>
+                You're in.
+              </h2>
+              <p style={{
+                fontSize: 14, color: MUTED, lineHeight: 1.7,
+                fontFamily: "var(--font-geist), sans-serif",
+                marginBottom: 24,
+              }}>
+                Thanks for reaching out. Ziad will be in touch within 24 hours to set up your intro call.
+              </p>
+              <button
+                onClick={() => setShowPopup(false)}
+                style={{
+                  background: INK, color: "#fff", border: "none",
+                  borderRadius: 100, padding: "11px 28px",
+                  fontSize: 14, fontWeight: 600, cursor: "pointer",
+                  fontFamily: "var(--font-geist), sans-serif",
+                }}
+              >
+                Got it
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <style>{`
         .lp-hero-grid {
           display: grid;
@@ -81,7 +169,7 @@ export default function OnePager() {
           .lp-nav-btn span { display: none; }
         }
       `}</style>
-      <AmbientBackground />
+      <AmbientBackground color="60,60,67" opacity={1.8} />
 
       {/* NAV */}
       <motion.nav
@@ -93,7 +181,7 @@ export default function OnePager() {
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
           display: "flex", alignItems: "center", justifyContent: "space-between",
           padding: "0 40px", height: 64,
-          background: "rgba(240,245,255,0.88)",
+          background: "rgba(250,250,250,0.88)",
           backdropFilter: "blur(20px)",
           borderBottom: `1px solid ${BORDER}`,
         }}
@@ -109,7 +197,7 @@ export default function OnePager() {
             fontFamily: "var(--font-geist), system-ui, sans-serif",
           }}
         >
-          Get your audit
+          Book intro call
         </button>
       </motion.nav>
 
@@ -133,9 +221,9 @@ export default function OnePager() {
                 borderRadius: 100, padding: "5px 14px", marginBottom: 28,
               }}
             >
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: S, display: "block" }} />
-              <span style={{ fontSize: 12, fontWeight: 500, color: P, letterSpacing: "0.02em", fontFamily: "var(--font-geist), sans-serif" }}>
-                Email marketing for 7-8 figure brands
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#22C55E", display: "block" }} />
+              <span style={{ fontSize: 12, fontWeight: 500, color: INK, letterSpacing: "0.02em", fontFamily: "var(--font-geist), sans-serif" }}>
+                End-to-end email systems for creators
               </span>
             </motion.div>
 
@@ -152,11 +240,8 @@ export default function OnePager() {
               }}
             >
               Email that turns<br />
-              <span style={{ color: P }}>your list</span> into<br />
-              <span style={{
-                background: `linear-gradient(135deg, ${P}, ${S})`,
-                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              }}>revenue.</span>
+              <span style={{ color: MUTED }}>your audience</span><br />
+              into revenue.
             </motion.h1>
 
             <motion.p
@@ -169,7 +254,7 @@ export default function OnePager() {
                 fontFamily: "var(--font-geist), sans-serif",
               }}
             >
-              We build, write, and run your entire email channel: setup, copywriting, campaigns, and analytics. You focus on the business. We handle the inbox.
+              We build and run the whole system: grow your list, run your newsletter every week, and launch your products. You create. We handle the inbox.
             </motion.p>
 
             {/* CTA — button morphs into email form on click */}
@@ -199,7 +284,7 @@ export default function OnePager() {
                       fontFamily: "var(--font-geist), sans-serif",
                     }}
                   >
-                    Get your free audit
+                    Book an intro call
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                       <path d="M2.5 7H11.5M11.5 7L7.5 3M11.5 7L7.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
@@ -221,7 +306,7 @@ export default function OnePager() {
                       border: `1.5px solid ${BORDER}`,
                       borderRadius: 100,
                       padding: "5px 5px 5px 20px",
-                      boxShadow: "0 4px 24px rgba(11,30,61,0.08)",
+                      boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
                     }}
                   >
                     <input
@@ -268,7 +353,7 @@ export default function OnePager() {
                       display: "flex", alignItems: "center", gap: 12,
                       background: "#fff", border: `1.5px solid rgba(34,197,94,0.3)`,
                       borderRadius: 100, padding: "12px 20px",
-                      boxShadow: "0 4px 24px rgba(11,30,61,0.08)",
+                      boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
                     }}
                   >
                     <div style={{
@@ -281,7 +366,7 @@ export default function OnePager() {
                       </svg>
                     </div>
                     <span style={{ fontSize: 14, fontWeight: 500, color: INK, fontFamily: "var(--font-geist), sans-serif" }}>
-                      You're on the list.
+                      Thanks. We'll reach out within 24 hours.
                     </span>
                   </motion.div>
                 )}
@@ -294,8 +379,8 @@ export default function OnePager() {
               )}
 
               {!submitted && !error && (
-                <p style={{ fontSize: 12, color: "rgba(11,30,61,0.35)", marginTop: 12, paddingLeft: 4, fontFamily: "var(--font-geist), sans-serif" }}>
-                  Free · No obligation · 48hr turnaround
+                <p style={{ fontSize: 12, color: "rgba(0,0,0,0.4)", marginTop: 12, paddingLeft: 4, fontFamily: "var(--font-geist), sans-serif" }}>
+                  20-min intro call · No commitment
                 </p>
               )}
             </motion.div>

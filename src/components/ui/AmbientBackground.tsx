@@ -9,11 +9,10 @@ import { useEffect, useRef } from "react";
   Respects prefers-reduced-motion.
 */
 
-const DOT_COUNT  = 70;
-const DOT_RADIUS = 1.6;
+const DOT_COUNT  = 90;
+const DOT_RADIUS = 2.0;
 const SPEED      = 0.22;   // px per frame
-const OPACITY    = 0.35;
-const COLOR      = "27,72,196"; // royal blue (RGB)
+const DEFAULT_COLOR = "27,72,196"; // royal blue (RGB)
 
 interface Dot {
   x: number; y: number;
@@ -21,7 +20,7 @@ interface Dot {
   r: number; o: number;
 }
 
-function makeDot(w: number, h: number): Dot {
+function makeDot(w: number, h: number, op: number): Dot {
   const angle = Math.random() * Math.PI * 2;
   const speed = SPEED * (0.5 + Math.random());
   return {
@@ -30,11 +29,11 @@ function makeDot(w: number, h: number): Dot {
     vx: Math.cos(angle) * speed,
     vy: Math.sin(angle) * speed,
     r:  DOT_RADIUS * (0.6 + Math.random() * 0.8),
-    o:  OPACITY   * (0.6 + Math.random() * 0.6),
+    o:  op * (0.6 + Math.random() * 0.6),
   };
 }
 
-export default function AmbientBackground() {
+export default function AmbientBackground({ color = DEFAULT_COLOR, opacity = 0.35 }: { color?: string; opacity?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -50,7 +49,7 @@ export default function AmbientBackground() {
     function resize() {
       w = canvas.width  = window.innerWidth;
       h = canvas.height = window.innerHeight;
-      dots = Array.from({ length: DOT_COUNT }, () => makeDot(w, h));
+      dots = Array.from({ length: DOT_COUNT }, () => makeDot(w, h, opacity));
     }
 
     function draw() {
@@ -67,7 +66,7 @@ export default function AmbientBackground() {
         // draw
         ctx.beginPath();
         ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${COLOR},${d.o})`;
+        ctx.fillStyle = `rgba(${color},${d.o})`;
         ctx.fill();
       }
       raf = requestAnimationFrame(draw);
@@ -80,7 +79,7 @@ export default function AmbientBackground() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [color]);
 
   return (
     <canvas
