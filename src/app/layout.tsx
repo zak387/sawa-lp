@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Inter } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 // ── UI Font: Geist ──────────────────────────────────────────
 // Technical precision. Designed for screens. From Vercel.
@@ -100,6 +101,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen overflow-x-hidden">
         {children}
+        <Analytics />
       </body>
     </html>
   );
