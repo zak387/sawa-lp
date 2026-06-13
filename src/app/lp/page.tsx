@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import AmbientBackground from "@/components/ui/AmbientBackground";
 import TabShowcase from "@/components/ui/TabShowcase";
 import Cal, { getCalApi } from "@calcom/embed-react";
 
@@ -73,7 +72,6 @@ export default function OnePager() {
           .lp-nav-btn span { display: none; }
         }
       `}</style>
-      <AmbientBackground color="60,60,67" opacity={1.8} />
 
       {/* NAV */}
       <motion.nav
