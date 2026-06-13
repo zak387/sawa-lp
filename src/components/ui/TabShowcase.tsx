@@ -339,8 +339,16 @@ export default function TabShowcase() {
 
   return (
     <div>
+      <style>{`
+        /* On mobile the labels are too long to share a row — stack the
+           pills full-width so they come up sequentially. */
+        @media (max-width: 768px) {
+          .ts-tabs { flex-direction: column !important; width: 100% !important; border-radius: 16px !important; gap: 6px !important; }
+          .ts-tab  { width: 100% !important; }
+        }
+      `}</style>
       {/* Tab pills */}
-      <div style={{
+      <div className="ts-tabs" style={{
         display: "flex", gap: 4, marginBottom: 20, flexWrap: "wrap",
         background: "rgba(0,0,0,0.04)", borderRadius: 100,
         padding: 4, width: "fit-content",
@@ -348,6 +356,7 @@ export default function TabShowcase() {
         {TABS.map(tab => (
           <button
             key={tab}
+            className="ts-tab"
             onClick={() => handleTabClick(tab)}
             style={{
               padding: "7px 16px", borderRadius: 100,

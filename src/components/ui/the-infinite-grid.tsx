@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import {
   motion,
@@ -113,6 +113,18 @@ export const InfiniteGridBackground = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // The scroll animation + cursor-reveal layer only make sense with a
+  // real pointer. On touch / small screens we skip both to keep mobile
+  // smooth (no per-frame repaints, no pointless masked second grid).
+  const [interactive, setInteractive] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 769px) and (pointer: fine)");
+    const update = () => setInteractive(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -129,6 +141,7 @@ export const InfiniteGridBackground = ({
   const speedY = 0.5;
 
   useAnimationFrame(() => {
+    if (!interactive) return;
     gridOffsetX.set((gridOffsetX.get() + speedX) % 40);
     gridOffsetY.set((gridOffsetY.get() + speedY) % 40);
   });
@@ -138,18 +151,20 @@ export const InfiniteGridBackground = ({
   return (
     <div
       ref={containerRef}
-      onMouseMove={handleMouseMove}
+      onMouseMove={interactive ? handleMouseMove : undefined}
       className={cn("absolute inset-0 overflow-hidden", className)}
     >
       <div className="absolute inset-0 z-0 opacity-[0.05]">
         <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} />
       </div>
-      <motion.div
-        className="absolute inset-0 z-0 opacity-40"
-        style={{ maskImage, WebkitMaskImage: maskImage }}
-      >
-        <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} />
-      </motion.div>
+      {interactive && (
+        <motion.div
+          className="absolute inset-0 z-0 opacity-40"
+          style={{ maskImage, WebkitMaskImage: maskImage }}
+        >
+          <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} />
+        </motion.div>
+      )}
 
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute right-[-20%] top-[-20%] w-[40%] h-[40%] rounded-full bg-signal/20 blur-[120px]" />

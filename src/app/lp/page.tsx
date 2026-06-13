@@ -64,12 +64,16 @@ export default function OnePager() {
             gap: 40px;
           }
           .lp-section {
-            padding: 90px 20px 48px !important;
+            padding: 96px 20px 48px !important;
           }
           .lp-nav {
             padding: 0 20px !important;
           }
           .lp-nav-btn span { display: none; }
+          /* More breathing room between hero elements on mobile */
+          .lp-badge    { margin-bottom: 40px !important; }
+          .lp-headline { margin-bottom: 30px !important; }
+          .lp-subhead  { margin-bottom: 44px !important; }
         }
       `}</style>
 
@@ -124,9 +128,10 @@ export default function OnePager() {
               the grid beneath; re-enabled on the CTA link below. */}
           <div style={{ pointerEvents: "none" }}>
             <motion.div
+              className="lp-badge"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.7, ease: EXPO }}
+              transition={{ delay: 0.08, duration: 0.55, ease: EXPO }}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 7,
                 background: `${P}12`, border: `1px solid ${P}30`,
@@ -140,9 +145,10 @@ export default function OnePager() {
             </motion.div>
 
             <motion.h1
+              className="lp-headline"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8, ease: EXPO }}
+              transition={{ delay: 0.16, duration: 0.65, ease: EXPO }}
               style={{
                 fontSize: "clamp(42px, 5vw, 66px)",
                 fontWeight: 700, lineHeight: 1.05,
@@ -158,9 +164,10 @@ export default function OnePager() {
             </motion.h1>
 
             <motion.p
+              className="lp-subhead"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45, duration: 0.7, ease: EXPO }}
+              transition={{ delay: 0.24, duration: 0.6, ease: EXPO }}
               style={{
                 fontSize: 17, lineHeight: 1.7, color: INK,
                 maxWidth: 440, marginBottom: 36,
@@ -175,7 +182,7 @@ export default function OnePager() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55, duration: 0.6, ease: EXPO }}
+              transition={{ delay: 0.32, duration: 0.55, ease: EXPO }}
               style={{ maxWidth: 420 }}
             >
               <a
@@ -208,7 +215,7 @@ export default function OnePager() {
             className="lp-showcase"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.9, ease: EXPO }}
+            transition={{ delay: 0.3, duration: 0.7, ease: EXPO }}
           >
             <TabShowcase />
           </motion.div>
