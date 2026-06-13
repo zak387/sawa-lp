@@ -8,8 +8,6 @@ import Cal, { getCalApi } from "@calcom/embed-react";
 
 const INK    = "#0A0A0A";
 const P      = "#0A0A0A";
-const S      = "#71717A";
-const MUTED  = "#71717A";
 const BORDER = "rgba(0,0,0,0.09)";
 const EXPO   = [0.16, 1, 0.3, 1] as const;
 
@@ -50,7 +48,7 @@ export default function OnePager() {
   }, []);
 
   return (
-    <div style={{ background: "#F5F5F5", minHeight: "100vh", position: "relative" }}>
+    <div style={{ background: "#FFFFFF", minHeight: "100vh", position: "relative" }}>
       <style>{`
         .lp-hero-grid {
           display: grid;
@@ -87,7 +85,7 @@ export default function OnePager() {
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
           display: "flex", alignItems: "center", justifyContent: "space-between",
           padding: "0 40px", height: 64,
-          background: "rgba(250,250,250,0.88)",
+          background: "rgba(255,255,255,0.88)",
           backdropFilter: "blur(20px)",
           borderBottom: `1px solid ${BORDER}`,
         }}
@@ -144,10 +142,11 @@ export default function OnePager() {
                 letterSpacing: "-0.04em", color: INK,
                 fontFamily: "var(--font-inter), system-ui, sans-serif",
                 marginBottom: 24,
+                textShadow: "0 1px 18px rgba(255,255,255,0.92), 0 0 6px rgba(255,255,255,0.92)",
               }}
             >
               Email that turns<br />
-              <span style={{ color: MUTED }}>your audience</span><br />
+              <span style={{ color: INK }}>your audience</span><br />
               into revenue.
             </motion.h1>
 
@@ -156,9 +155,10 @@ export default function OnePager() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45, duration: 0.7, ease: EXPO }}
               style={{
-                fontSize: 17, lineHeight: 1.7, color: MUTED,
+                fontSize: 17, lineHeight: 1.7, color: INK,
                 maxWidth: 440, marginBottom: 36,
                 fontFamily: "var(--font-geist), sans-serif",
+                textShadow: "0 1px 14px rgba(255,255,255,0.95), 0 0 5px rgba(255,255,255,0.95)",
               }}
             >
               We build and run the whole system: grow your list, run your newsletter every week, and launch your products. You create. We handle the inbox.
@@ -223,12 +223,14 @@ export default function OnePager() {
             fontSize: "clamp(30px, 4vw, 44px)", fontWeight: 700,
             letterSpacing: "-0.03em", color: INK, marginBottom: 12,
             fontFamily: "var(--font-inter), system-ui, sans-serif",
+            textShadow: "0 1px 18px rgba(255,255,255,0.92), 0 0 6px rgba(255,255,255,0.92)",
           }}>
             Pick a time that works
           </h2>
           <p style={{
-            fontSize: 16, color: MUTED, lineHeight: 1.6,
+            fontSize: 16, color: INK, lineHeight: 1.6,
             fontFamily: "var(--font-geist), sans-serif",
+            textShadow: "0 1px 14px rgba(255,255,255,0.95), 0 0 5px rgba(255,255,255,0.95)",
           }}>
             30-min intro call · No commitment · Book directly below
           </p>

@@ -367,20 +367,29 @@ export default function TabShowcase() {
         ))}
       </div>
 
-      {/* Panel */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, y: 12, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -8, scale: 0.98 }}
-          transition={{ duration: 0.35, ease: EXPO }}
-        >
-          {active === "Grow"       && <GrowPanel       active={active === "Grow"} />}
-          {active === "Newsletter" && <NewsletterPanel active={active === "Newsletter"} />}
-          {active === "Launch"     && <LaunchPanel     active={active === "Launch"} />}
-        </motion.div>
-      </AnimatePresence>
+      {/* Panel — all three are stacked in a single grid cell so the
+          container's height is fixed to the tallest panel. Switching
+          tabs only cross-fades opacity, so nothing moves vertically
+          and the rest of the page never shifts up or down. */}
+      <div style={{ display: "grid" }}>
+        {TABS.map(tab => (
+          <motion.div
+            key={tab}
+            aria-hidden={active !== tab}
+            initial={false}
+            animate={{ opacity: active === tab ? 1 : 0 }}
+            transition={{ duration: 0.35, ease: EXPO }}
+            style={{
+              gridArea: "1 / 1",
+              pointerEvents: active === tab ? "auto" : "none",
+            }}
+          >
+            {tab === "Grow"       && <GrowPanel       active={active === "Grow"} />}
+            {tab === "Newsletter" && <NewsletterPanel active={active === "Newsletter"} />}
+            {tab === "Launch"     && <LaunchPanel     active={active === "Launch"} />}
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }
