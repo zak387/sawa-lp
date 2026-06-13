@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import TabShowcase from "@/components/ui/TabShowcase";
+import { InfiniteGridBackground } from "@/components/ui/the-infinite-grid";
 import Cal, { getCalApi } from "@calcom/embed-react";
 
 const INK    = "#0A0A0A";
@@ -62,7 +63,6 @@ export default function OnePager() {
             grid-template-columns: 1fr;
             gap: 40px;
           }
-          .lp-showcase { display: none; }
           .lp-section {
             padding: 90px 20px 48px !important;
           }
@@ -107,13 +107,22 @@ export default function OnePager() {
       {/* HERO */}
       <section className="lp-section" style={{
         minHeight: "100vh", display: "flex", alignItems: "center",
-        padding: "100px 40px 60px", maxWidth: 1200, margin: "0 auto",
-        position: "relative", zIndex: 1,
+        padding: "100px 40px 60px",
+        position: "relative", zIndex: 1, overflow: "hidden",
       }}>
+        {/* Full-bleed interactive infinite-grid background.
+            Sits at z-0; hero content is lifted to z-10 above it. */}
+        <InfiniteGridBackground className="z-0" />
+
+        <div style={{
+          position: "relative", zIndex: 10,
+          width: "100%", maxWidth: 1200, margin: "0 auto",
+        }}>
         <div className="lp-hero-grid">
 
-          {/* Copy */}
-          <div>
+          {/* Copy — pointer-events disabled so the cursor reveal reaches
+              the grid beneath; re-enabled on the CTA link below. */}
+          <div style={{ pointerEvents: "none" }}>
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -179,6 +188,7 @@ export default function OnePager() {
                   cursor: "pointer", letterSpacing: "-0.01em",
                   fontFamily: "var(--font-geist), sans-serif",
                   textDecoration: "none",
+                  pointerEvents: "auto",
                 }}
               >
                 Book an intro call
@@ -193,7 +203,7 @@ export default function OnePager() {
             </motion.div>
           </div>
 
-          {/* Tab Showcase — hidden on mobile */}
+          {/* Tab Showcase */}
           <motion.div
             className="lp-showcase"
             initial={{ opacity: 0, scale: 0.96 }}
@@ -202,6 +212,7 @@ export default function OnePager() {
           >
             <TabShowcase />
           </motion.div>
+        </div>
         </div>
       </section>
 

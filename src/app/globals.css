@@ -26,6 +26,19 @@
   --color-royal:    #1B48C4;
   --color-royal-dim:#1539A3;
 
+  /* ── shadcn semantic aliases ────────────────────────────── */
+  /* Map shadcn-style tokens onto the Sawa palette so copy-pasted
+     shadcn/ui components (e.g. the-infinite-grid) render on-brand
+     without modification. */
+  --color-background:            #FFFFFF;            /* page surface */
+  --color-foreground:            var(--color-ink);   /* primary text */
+  --color-muted:                 #E8F0FF;            /* muted surface */
+  --color-muted-foreground:      var(--color-stone); /* secondary text */
+  --color-primary:               var(--color-royal); /* primary CTA */
+  --color-primary-foreground:    #FFFFFF;
+  --color-secondary:             #E8F0FF;            /* secondary surface */
+  --color-secondary-foreground:  var(--color-ink);
+
   /* ── Typography ─────────────────────────────────────────── */
   --font-display: var(--font-inter), 'Inter', system-ui, sans-serif;
   --font-sans: var(--font-geist), 'Geist', system-ui, sans-serif;
