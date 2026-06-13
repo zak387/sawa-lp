@@ -43,11 +43,29 @@ function Shell({ title, children }: { title: string; children: React.ReactNode }
   );
 }
 
+/* ── Instant mode ───────────────────────────────────────────────────
+   On mobile / reduced-motion devices the per-frame count-up re-renders
+   make the numbers look slow and glitchy. In those cases we skip the
+   animation and snap straight to the final values. */
+function useInstant() {
+  const [instant, setInstant] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px), (prefers-reduced-motion: reduce)");
+    const update = () => setInstant(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return instant;
+}
+
 /* ── Animated counter hook ──────────────────────────────────────── */
 function useCounter(target: number, active: boolean, duration = 1600, start = 0) {
+  const instant = useInstant();
   const [val, setVal] = useState(start);
   useEffect(() => {
     if (!active) { setVal(start); return; }
+    if (instant) { setVal(target); return; }
     let raf = 0, begin = 0;
     const step = (ts: number) => {
       if (!begin) begin = ts;
@@ -59,7 +77,7 @@ function useCounter(target: number, active: boolean, duration = 1600, start = 0)
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [active, target, duration, start]);
+  }, [active, target, duration, start, instant]);
   return val;
 }
 
@@ -152,12 +170,14 @@ function NewsletterPanel({ active }: { active: boolean }) {
   const [litCount, setLitCount] = useState(0);
   const openRate  = useCounter(55, active, 1400);
   const clickRate = useCounter(4,  active, 1400);
+  const instant   = useInstant();
 
   useEffect(() => {
     if (!active) { setLitCount(0); return; }
+    if (instant) { setLitCount(LIT_TARGET); return; }
     const t = setInterval(() => setLitCount(n => (n >= LIT_TARGET ? n : n + 1)), 28);
     return () => clearInterval(t);
-  }, [active]);
+  }, [active, instant]);
 
   return (
     <Shell title="sawa · weekly-edition">
